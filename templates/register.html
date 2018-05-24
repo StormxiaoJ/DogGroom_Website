@@ -1,0 +1,68 @@
+
+{% load static %}
+
+
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <title>sign up and log in</title>
+  <link href='https://fonts.googleapis.com/css?family=Titillium+Web:400,300,600' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="/static/css/normalize.min.css">
+
+
+      <link rel="stylesheet" href="/static/css/style.css">
+  <style>
+    body{
+      font-family: Gabriola;
+      background-size:100%;
+      background-image: url("https://media1.s-nbcnews.com/j/MSNBC/Components/Video/201712/1920_baby_dog_Screen_Shot_2017-12-05_at_2-18-56_PM.today-vid-canonical-featured-desktop.jpg");
+    }
+  </style>
+</head>
+
+
+<body>
+
+
+  <div class="form">
+
+      <h1>Dog  grooming   express</h1>
+        <div id="signup">
+          <h1>Sign Up for Free</h1>
+
+          <form action="{% url 'register'%}" method="POST">
+               {% csrf_token %}
+
+
+          {% comment %} <div class="field-wrap">
+              <p>{{ form }}</p>
+          </div> {% endcomment %}
+          <div class="field-wrap">
+              {% for field in form %}
+                  <tr>
+                      <th><p style="font-size:15pt; color: #ffffff;">{{field.label}}</p></th>
+                      <td>{{field}}</td>
+                  </tr> 
+              {% endfor %}
+          </div>
+
+
+
+          <button type="submit" class="button button-block"/>Register now</button>
+
+          </form>
+
+        </div>
+
+
+
+      </div><!-- tab-content -->
+
+</div> <!-- /form -->
+  <script src='js/jquery.min.js'></script>
+
+    <script  src="js/index.js"></script>
+
+</body>
+</html>

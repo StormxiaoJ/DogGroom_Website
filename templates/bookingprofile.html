@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block jquerys %}
+
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+
+
+
+{% endblock  %}
+
+
+{% block content %}
+
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Update" />
+        
+    </form>
+    <button id = "cncBtn">Cancel</button>
+
+
+    <script>
+
+            $('#cncBtn').click(function(){
+                
+                window.location=window.location.origin;
+            })
+            
+
+    $("#selectdate_for_modify").blur(function(){
+
+        
+
+        var value = $("#selectdate_for_modify").val();
+
+        $.ajax({
+            type: "POST",
+            url: window.location.origin + "/fetch_date_view/",
+            data: {selectdate : value},
+            success:function(data){  
+                
+                var availtimeitems = data.list_of_avail
+                $("#selecttime_for_modify").html("<option value =" + availtimeitems[0] + ">" + availtimeitems[0]
+                        + "</option>")
+                
+                for (var i = 1;  i<availtimeitems.length; i++)
+                {
+                    $("#selecttime_for_modify").append("<option value =" + availtimeitems[i] + ">" + availtimeitems[i]
+                            + "</option>"); 
+                }
+                
+                console.log(data.list_of_avail)
+
+            } 
+            })
+        })
+
+
+
+
+
+
+</script>
+
+{% endblock %}

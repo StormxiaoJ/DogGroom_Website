@@ -1,0 +1,353 @@
+
+	{% extends "base.html" %}
+	{% load static %}
+	{% block jquerys %}
+		<meta http-equiv="Content-Type" content="text/html; charset={CHARSET}" />
+		<!-- <link rel="stylesheet" href="css/shop.css" type="text/css" media="all" /> -->
+		<link rel="stylesheet" href="{%static 'css/shop_l.css' %}" />
+		<!-- <link rel="stylesheet" type="text/css" media="all" href="css/style.css" /> -->
+		<link rel="stylesheet" href="{%static 'css/style_l.css' %}" />
+		 <!-- <link rel="stylesheet" type="text/css" media="all" href="css/home.css" /> -->
+		 <link rel="stylesheet" href="{%static 'css/home_l.css' %}" />
+		<script src="http://code.jquery.com/jquery-latest.js"></script>
+	<!-- <style>
+		.stretched-layout .bgWrapper {
+		background-color: #ffffff;
+		background-image:  url('../images/backgrounds/backgrounds/002.jpg'); 
+		background-position: top center;
+		background-repeat: repeat;
+		background-attachment: fixed}
+	</style> -->
+		
+	
+	{% endblock  %}
+	
+		
+		
+	
+	<!--<body class="responsive boxed-layout no_js">-->
+		{% block content %}
+		<div class="responsive boxed-layout no_js">
+		<div class="bgLight group" >
+			<div class="wrapper group">
+				<div class="bgWrapper group">
+					<div id="header" class="group">
+                        <!-- .inner -->
+                        <div class="inner group">
+                            <!-- START LOGO -->
+                            <div id="logo" class="group">
+                                <a href="index.html" title="Sommerce Shop"> 
+                                <span class="logo-title">Dog Grooming</span>
+								</a>         
+								{% if user.first_name %}
+									<p class="logo-description">Hello there, {{user.first_name}}</p>
+								{% else %}
+									<p class="logo-description">Hello there, {{user.get_username}}</p>
+								{% endif %}
+                                
+                            </div>
+                            
+                            <ul id="linksbar" class="group">
+                                
+                                <li class="icon lock">
+                                    <a href="{% url 'logout' %}">Logout</a> |
+                                </li>
+                                <li><a href="{% url 'profile' %}">Edit Profile</a></li>
+                            </ul>
+                            
+                            <!-- END LINKSBAR -->  
+                            <div class="clear"></div>
+                            
+                                <!-- START NAV -->
+                                <div id="nav" class="group creative">
+                                   <!--<ul id="menu-navigation" class="level-1">-->
+                                        
+                                    <!--</ul>-->
+                                </div>
+                                <!-- END NAV -->
+                                
+                                <!-- START SEARCH FORM -->  
+                                <form role="search" method="get" id="searchform" action="#" class="group">
+                                
+                                </form>
+                                <!-- END SEARCH FORM -->
+                            
+                            </div>
+                            <!-- end .inner -->  
+                             
+                        </div>
+                        <!-- END HEADER --> 
+					<div id="primary" class="inner grooup">
+							<div id="content" class="group" role="main">
+									<h2>Here shows a list of your dogs</h2>
+									<form method="post", action="{% url 'dog_delete_view'%}">
+							        {% csrf_token %}
+							        
+							        
+									 <table class="shop_table my_account_orders" id = "test_table">
+										<thead>
+										   <tr>
+										   	  <th><span class="nobr"></span></th>
+											  <th><span class="nobr">Dog Name</span></th>
+											  <th><span class="nobr">Date Of Birth</span></th>
+											  <th><span class="nobr">Breed</span></th>
+											  
+										   </tr>
+										</thead>
+										<tbody>  
+										{% for dog in mydogs %}
+						                <tr id="cloneTr">  
+						                   <td><input type="checkbox" name = "id_list" value={{ dog.dogid }} /></td>
+						                   <td>{{dog.dogname}}</td>  
+						                   <td>{{dog.dob}}</td>  
+										   <td>{{dog.get_breed_display}}</td>
+										   <td>
+											   <button type="submit" 
+														  name = 'dogtobemodified' 
+														  value="{{dog.dogid}}"
+														  formmethod="GET"
+														  formaction="{% url 'dogupdateview' %}">
+												   Edit Me
+												</button>
+											</td>
+										</tr>  
+										{% endfor %}
+						             	</tbody> 
+									 </table>
+									 
+									{% if mydogs %}
+									
+										<input type="submit" value="Delete">
+									
+									{% endif %}
+    
+										
+									</form>
+									<h2>Here you can register your other puppies</h3>
+			    					<form action = "{% url 'home_adddog_form'%}", method = "POST">
+								            {% csrf_token %}
+								                <p>{{ adddog_form }}</p>
+								            <input type = "submit" value = "Register your dog">
+								    </form>
+			    					<h2>Here shows the existing booking</h4>
+			    					<form method="post", action="{% url 'booking_delete_view'%}">
+								    {% csrf_token %}
+								    
+								    
+									 <table class="shop_table my_account_orders" id = "test_table">
+										<thead>
+										   <tr>
+											  <th><span class="nobr"></span></th>
+											  <th><span class="nobr">Dog Name</span></th>
+											  <th><span class="nobr">Grooming Date</span></th>
+											  <th><span class="nobr">Start Time</span></th>
+											  <th><span class="nobr">Grooming Option</span></th>
+											  <th><span class="nobr">Instruction</span></th>
+											  
+										   </tr>
+										</thead>
+										<tbody>
+										{% for booking in mybookings %}
+											<tr id="cloneTr">  
+						                   <td><input type="checkbox" name = "id_list" value={{ booking.bookingid }} /></td>
+						                   <td>{{booking.dog.dogname}}</td>  
+						                   <td>{{booking.date}}</td>  
+						                   <td>{{booking.starttime}}</td>
+						                   <td>{{booking.get_washoption_display}}</td>
+										   <td>{{booking.instruction}}</td>
+										   <td>
+												<button type="submit" 
+												name = 'tobemodified' 
+												value="{{booking.bookingid}}"
+												formmethod="GET"
+												formaction="{% url 'bookingmodify' %}">
+										 			Edit Me
+								  				</button>
+										   </td>
+											</tr> 
+											
+										{% endfor %}
+										</tbody>
+									 </table>
+									 
+
+									 {% if mybookings %}
+									 
+									 	<input type="submit" value="Delete">
+									 {% endif %}
+									    
+									    <!-- <input type="button" value="Re-Schedule" id="reschedulebtn"> -->
+									</form>
+									
+									<div id="edit-content-wrapper">
+
+
+									</div>
+
+
+
+									<h2>Here you can make a booking</h2>
+
+									<form  id = "makebookingform" action = "{% url 'home'%}", method = "POST">
+									        {% csrf_token %}
+									    <div class="field-wrap">
+
+											<th><p style="font-size:15pt; color:black;">{{booking_form.dog.label}}</p></th>
+											
+											<td>{{booking_form.dog}}</td>
+
+											<th><p style="font-size:15pt; color:black;">Date & Time</p></th>
+
+											<td>
+
+                                                <input type="date" value = {{ booking_form.date }}
+                                            </td>
+                                        {{booking_form.starttime}}
+											
+											<th><p style="font-size:15pt; color:black;">{{booking_form.washoption.label}}</p></th>
+											<td>{{booking_form.washoption}}</td>
+
+											<th><p style="font-size:15pt; color:black;">{{booking_form.instruction.label}}</p></th>
+											<td>{{booking_form.instruction}}</td>
+
+
+									            <!-- {% for field in booking_form %}
+									                <tr>
+									                    <th><p style="font-size:15pt; color:black;">{{field.label}}</p></th>
+									                    <td>
+									                        {{field}}
+									                    </td>
+									                </tr> 
+												{% endfor %} -->
+												
+									    </div>
+									    <input type = "submit" value = "Submit">
+									    
+									</form>
+									
+									
+									
+									
+									
+							</div>
+					</div>
+						
+                
+				</div>	
+                
+			</div>
+		</div>
+		</div>
+		<script>
+
+		
+
+        var availtimeitems
+
+        $("#selectdate").blur(function(){
+
+			
+
+        var value = $("#selectdate").val();
+        $.ajax({
+            type: "POST",
+            url: window.location.origin + "/fetch_date_view/",
+            data: {selectdate : value},
+            success:function(data){  
+                
+                availtimeitems = data.list_of_avail
+                $("#selecttime").html("<option value =" + availtimeitems[0] + ">" + availtimeitems[0]
+                        + "</option>")
+                
+                for (var i = 1;  i<availtimeitems.length; i++)
+                {
+                    $("#selecttime").append("<option value =" + availtimeitems[i] + ">" + availtimeitems[i]
+                            + "</option>"); 
+                }
+                
+                console.log(data.list_of_avail)
+
+            } 
+            })
+        })
+
+
+		$("#selectdate").blur(function(){
+
+			
+
+var value = $("#selectdate_for_modify").val();
+$.ajax({
+	type: "POST",
+	url: window.location.origin + "/fetch_date_view/",
+	data: {selectdate : value},
+	success:function(data){  
+		
+		availtimeitems = data.list_of_avail
+		$("#selecttime_for_modify").html("<option value =" + availtimeitems[0] + ">" + availtimeitems[0]
+				+ "</option>")
+		
+		for (var i = 1;  i<availtimeitems.length; i++)
+		{
+			$("#selecttime_for_modify").append("<option value =" + availtimeitems[i] + ">" + availtimeitems[i]
+					+ "</option>"); 
+		}
+		
+		console.log(data.list_of_avail)
+
+	} 
+	})
+})
+
+        $('#reschedulebtn').click(function(){
+
+            console.log(availtimeitems)
+
+            var selected = new Array();
+            
+            $('input:checkbox:checked').each(function(){
+                selected.push($(this).val());
+
+            })
+
+            if (selected.length == 0)
+            {
+                alert("You haven't select a booking yet.")
+            }
+            else if ((selected.length > 1))
+            {
+                alert("You can only re-schedule 1 booking at a time")
+            }
+            else
+            {
+                var selectedbooking = selected[0]
+                $.ajax({
+                    type: "GET",
+                    url: window.location.origin + "/booking_update_view/",
+                    data: {tobemodified : selectedbooking},
+                    
+                    success:function(data){  
+
+						console.log(data)
+                        
+                        $("#edit-content-wrapper").html(data);
+                        
+                        $("#selecttime_for_update").html("<option value =" + availtimeitems[0] + ">" + availtimeitems[0]
+                            + "</option>")
+                    
+                        for (var i = 1;  i<availtimeitems.length; i++)
+                        {
+                            $("#selecttime_for_update").append("<option value =" + availtimeitems[i] + ">" + availtimeitems[i]
+                                    + "</option>"); 
+                        }
+                    }
+                })
+            }
+        })
+
+		</script>
+		
+		{% endblock  %}
+	<!--</body>-->
+
+
